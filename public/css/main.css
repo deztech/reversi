@@ -22,6 +22,7 @@ h1 {
     margin-bottom:50px;
 }
 
-#credit {
+footer span {
     font-size: 0.9rem;
+    line-height: 0.9em;
 }
