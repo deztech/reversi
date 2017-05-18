@@ -1,3 +1,5 @@
+//////////////////////////////// WEB SERVER SETUP ////////////////////////////////
+
 // Include static file webserver library...
 var _mStatic = require('node-static');
 
@@ -27,4 +29,28 @@ var _mApp = _mHTTP.createServer(function (request, response) {
                                 }
                              ).listen(_mPort);
 
-console.log('SERVER RUNNING...');
+console.log('SERVER IS RUNNING...');
+
+
+
+//////////////////////////////// WEB SOCKET SETUP ////////////////////////////////
+
+var _mIO = require('socket.io').listen(_mApp);
+
+_mIO.sockets.on('connection', function (_Socket) {
+    function log() {
+        var _Array = ['*** Server Log Message: '];
+        for (var i = 0; i < arguments.length; i++) {
+            _Array.push(arguments[i]);
+            console.log(arguments[i]);
+        }
+        _Socket.emit('log', _Array);
+        _Socket.broadcast.emit('log', _Array);
+    }
+
+    log('A website CONNECTED to the server.');
+
+    _Socket.on('disconnect', function () {
+        log('A website DISconnected from the server.');
+    });
+});

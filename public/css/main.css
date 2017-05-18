@@ -6,8 +6,12 @@ body {
     background-color:#ccf;
 }
 
+.navbar-toggler i {
+    font-size: 1.5rem;
+}
+
 .add-row-spacing div.row {
-    margin:15px 0;
+    margin: 15px 0;
 }
 
 h1 {
