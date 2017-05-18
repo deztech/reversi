@@ -51,18 +51,26 @@
             <div class="row">
                 <div class="col">
                     <h2>Welcome, <span id="username"></span></h2>
-                    <h4>Messages...</h4>
-                    <div id="messages">
-                        <div id="message">Sample Message</div>
-                    </div>
                 </div>
             </div>
-            <div class="row text-center">
+            <div class="row">
                 <div class="col">
-                    <a href="index.html" class="btn btn-lg btn-secondary" style="min-width:120px;">Home</a>
+                    <form class="form-inline" onsubmit="SendMessage(); return false;">
+                        <div class="col-9">
+                            <label for="NewMessage" class="col-form-label sr-only">Enter Chat Message:</label>
+                            <input id="NewMessage" class="form-control" type="text" placeholder="Enter chat message..." />
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                    </form>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col">
-                    <a href="https://en.wikipedia.org/wiki/Reversi" target="_blank" class="btn btn-lg btn-secondary" style="min-width:120px;">Rules <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                    <h4>Messages...</h4>
+                    <div id="messages">
+                    </div>
                 </div>
             </div>
         </main>
@@ -85,22 +93,59 @@
 
     <script src="js/main.js"></script>
     <script>
-        $(document).ready(function () {
-            var _Username = GetUrlParamValue('u');
+        var _mChatRoom = 'Lobby';
+        var _mUsername = GetUrlParamValue('u');
 
-            if (!_Username) {
-                _Username = 'Player' + Math.round(Math.random() * 10000)
-            }
+        //Establish a WebSockets connection using socket.io
+        var _Socket = io.connect();
 
-            $('#username').text(_Username);
-
-            var _Socket = io.connect();
-            _Socket.on('log', function (array) {
-                console.log.apply(console.array);
-            });
+        //Logging...
+        _Socket.on('log', function (_Array) {
+            console.log.apply(console, _Array);
         });
 
+        //Handle responses...
+        _Socket.on('join_room_response', function (_Payload) {
+            if (_Payload.result === 'fail') {
+                alert(_Payload.message);
+                return;
+            }
+            $('#messages').prepend('<p>' + _Payload.username + ' has joined the ' + _Payload.room + '!</p>');
+        });
 
+        _Socket.on('send_message_response', function (_Payload) {
+            if (_Payload.result === 'fail') {
+                alert(_Payload.message);
+                return;
+            }
+            $('#NewMessage').val('');
+            $('#messages').prepend('<p><strong>' + _Payload.username + ':</strong> ' + _Payload.message + '</p>');
+        });
+
+        //Send a message to JOIN ROOM...
+        var _JoinPayload = {};
+        _JoinPayload.room = _mChatRoom;
+        _JoinPayload.username = _mUsername;
+        console.log('JoinPayload: ' + JSON.stringify(_JoinPayload));
+        _Socket.emit('join_room', _JoinPayload);
+
+        //Send a message to CHAT...
+        function SendMessage() {
+            var _ChatPayload = {};
+            _ChatPayload.room = _mChatRoom;
+            _ChatPayload.username = _mUsername;
+            _ChatPayload.message = $('#NewMessage').val();
+            console.log('ChatPayload: ' + JSON.stringify(_ChatPayload));
+            _Socket.emit('send_message', _ChatPayload);
+        }
+
+        //Init the UI after load...
+        $(function () {
+            if (!_mUsername) {
+                _mUsername = 'Player' + Math.round(Math.random() * 10000)
+            }
+            $('#username').text(_mUsername);
+        });
     </script>
 </body>
 </html>

@@ -53,4 +53,100 @@ _mIO.sockets.on('connection', function (_Socket) {
     _Socket.on('disconnect', function () {
         log('A website DISconnected from the server.');
     });
+
+    //_Payload: room=room to join; username=user joining
+    _Socket.on('join_room', function (_Payload) {
+        log('Server Received Command', 'join_room', _Payload);
+
+        var _Msg = '';
+
+        if (typeof _Payload === 'undefined' || !_Payload) {
+            _Msg = 'No Payload Received - Command Aborted';
+            log(_Msg);
+            _Socket.emit('join_room_response', { result: 'fail', message: _Msg });
+            return;
+        }
+
+        var _Room = _Payload.room;
+        if (typeof _Room === 'undefined' || !_Room) {
+            _Msg = 'No Room Received - Command Aborted';
+            log(_Msg);
+            _Socket.emit('join_room_response', { result: 'fail', message: _Msg });
+            return;
+        }
+
+        var _Username = _Payload.username;
+        if (typeof _Username === 'undefined' || !_Username) {
+            _Msg = 'No Username Received - Command Aborted';
+            log(_Msg);
+            _Socket.emit('join_room_response', { result: 'fail', message: _Msg });
+            return;
+        }
+
+        _Socket.join(_Room);
+
+        var _RoomObject = _mIO.sockets.adapter.rooms[_Room];
+        if (typeof _RoomObject === 'undefined' || !_RoomObject) {
+            _Msg = 'Could Not Create Room (Internal Error) - Command Aborted';
+            log(_Msg);
+            _Socket.emit('join_room_response', { result: 'fail', message: _Msg });
+            return;
+        }
+
+        var _NumClients = _RoomObject.length;
+        var _SuccessData = {
+            result: 'success',
+            room: _Room,
+            username: _Username,
+            membership: (_NumClients + 1)
+        };
+        _mIO.sockets.in(_Room).emit('join_room_response', _SuccessData);
+        log('Room ' + _Room + ' was joined by ' + _Username + '.');
+    });
+
+    //_Payload: room=room to join; username=user joining
+    _Socket.on('send_message', function (_Payload) {
+        log('Server Received Command', 'send_message', _Payload);
+
+        var _Msg = '';
+
+        if (typeof _Payload === 'undefined' || !_Payload) {
+            _Msg = 'No Payload Received - Command Aborted';
+            log(_Msg);
+            _Socket.emit('send_message_response', { result: 'fail', message: _Msg });
+            return;
+        }
+
+        var _Room = _Payload.room;
+        if (typeof _Room === 'undefined' || !_Room) {
+            _Msg = 'No Room Received - Command Aborted';
+            log(_Msg);
+            _Socket.emit('send_message_response', { result: 'fail', message: _Msg });
+            return;
+        }
+
+        var _Username = _Payload.username;
+        if (typeof _Username === 'undefined' || !_Username) {
+            _Msg = 'No Username Received - Command Aborted';
+            log(_Msg);
+            _Socket.emit('send_message_response', { result: 'fail', message: _Msg });
+            return;
+        }
+
+        var _ChatMessage = _Payload.message;
+        if (typeof _ChatMessage === 'undefined' || !_ChatMessage) {
+            _Msg = 'No Chat Message Received - Command Aborted';
+            log(_Msg);
+            _Socket.emit('send_message_response', { result: 'fail', message: _Msg });
+            return;
+        }
+        var _SuccessData = {
+            result: 'success',
+            room: _Room,
+            username: _Username,
+            message: _ChatMessage
+        };
+        _mIO.sockets.in(_Room).emit('send_message_response', _SuccessData);
+        log(_Username + ' chatted in ' + _Room + '.');
+    });
 });
