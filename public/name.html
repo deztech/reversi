@@ -4,7 +4,7 @@
     <!-- Required meta / title tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Play Reversi Online (Othello)</title>
+    <title>Enter Username to Play</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -17,31 +17,81 @@
 <body>
 
     <div class="container-fluid add-row-spacing">
-        <div class="row text-center">
-            <div class="col">
-                <a href="/"><img class="img-fluid" src="https://lorempixel.com/1000/500/abstract/Reversi/" alt="Play Reversi Online (Othello)" /></a>
-                <h1>Enter Your Name</h1>
+        <header>
+            <nav class="navbar navbar-toggleable-sm bg-faded">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    MENU <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <a class="navbar-brand" href="#welcome">Reversi</a>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="name.html">Play</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://en.wikipedia.org/wiki/Reversi" target="_blank">Rules <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div class="row text-center">
+                <div class="col">
+                    <a href="/"><img class="img-fluid" src="https://lorempixel.com/1000/400/abstract/Reversi/" alt="Play Reversi Online (Othello)" /></a>
+                    <h1>Enter Your Username</h1>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <p>Placeholder Page</p>
+            <div class="row">
+                <form id="formName" class="form-inline" onsubmit="submitForm(); return false;">
+                    <div class="col-9">
+                        <label for="username" class="col-form-label sr-only">Enter Your Username:</label>
+                        <input id="username" class="form-control" type="text" placeholder="Username" />
+                    </div>
+                    <div class="col-3">
+                        <button type="submit" class="btn btn-primary">Play</button>
+                    </div>
+                </form>
             </div>
-        </div>
-        <div class="row text-center">
-            <div class="col">
-                <a href="index.html" class="btn btn-lg btn-secondary" style="min-width:120px;">Home</a>
+            <div class="row text-center">
+                <div class="col">
+                    <a href="index.html" class="btn btn-lg btn-secondary" style="min-width:120px;">Home</a>
+                </div>
+                <div class="col">
+                    <a href="https://en.wikipedia.org/wiki/Reversi" target="_blank" class="btn btn-lg btn-secondary" style="min-width:120px;">Rules <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                </div>
             </div>
-            <div class="col">
-                <a href="https://en.wikipedia.org/wiki/Reversi" target="_blank" class="btn btn-lg btn-secondary" style="min-width:120px;">Rules <i class="fa fa-external-link" aria-hidden="true"></i></a>
+        </main>
+        <footer>
+            <div class="row text-center">
+                <div class="col">
+                    <span id="credit">By <a href="http://aaronsoto.com" target="_blank">Aaron Soto <i class="fa fa-external-link" aria-hidden="true"></i></a><br />
+                        For <a href="http://mhcid.ics.uci.edu/" target="_blank">UC Irvine's MHCID Program <i class="fa fa-external-link" aria-hidden="true"></i></a></span>
+                </div>
             </div>
-        </div>
+        </footer>
     </div>
 
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <script>
+        function submitForm() {
+            var _Username = $('#username').val();
+            var _LobbyUrl = 'lobby.html?u=' + _Username;
+            window.location.href = _LobbyUrl;
+        }
+    </script>
 
 </body>
 </html>

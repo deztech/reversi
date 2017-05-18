@@ -4,7 +4,7 @@
     <!-- Required meta / title tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>About Reversi (Othello)</title>
+    <title>Reversi Lobby</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -34,7 +34,7 @@
                             <a class="nav-link" href="name.html">Play</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="about.html">About</a>
+                            <a class="nav-link" href="about.html">About</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://en.wikipedia.org/wiki/Reversi" target="_blank">Rules <i class="fa fa-external-link" aria-hidden="true"></i></a>
@@ -47,12 +47,16 @@
             <div class="row text-center">
                 <div class="col">
                     <a href="/"><img class="img-fluid" src="https://lorempixel.com/1000/400/abstract/Reversi/" alt="Play Reversi Online (Othello)" /></a>
-                    <h1>About</h1>
+                    <h1>Lobby</h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <p><em>From Wikipedia:</em> <strong>Reversi</strong> is a strategy board game for two players, played on an 8 x 8 uncheckered board. There are sixty-four identical game pieces called disks (often spelled "discs"), which are light on one side and dark on the other. Players take turns placing disks on the board with their assigned color facing up. During a play, any disks of the opponent's color that are in a straight line and bounded by the disk just placed and another disk of the current player's color are turned over to the current player's color.</p>
+                    <h2>Welcome, <span id="username"></span></h2>
+                    <h4>Messages...</h4>
+                    <div id="messages">
+                        <div id="message">Sample Message</div>
+                    </div>
                 </div>
             </div>
             <div class="row text-center">
@@ -79,5 +83,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
+    <script src="js/main.js"></script>
+    <script>
+        $(document).ready(function () {
+            var _Username = GetUrlParamValue('u');
+
+            if (!_Username) {
+                _Username = 'Player' + Math.round(Math.random() * 10000)
+            }
+
+            $('#username').text(_Username);
+        });
+    </script>
 </body>
 </html>

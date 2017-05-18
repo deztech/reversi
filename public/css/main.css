@@ -13,3 +13,11 @@ body {
 h1 {
     margin-top:10px;
 }
+
+#formName {
+    margin-bottom:50px;
+}
+
+#credit {
+    font-size: 0.9rem;
+}
