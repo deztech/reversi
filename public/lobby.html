@@ -91,6 +91,10 @@
         var _mChatRoom = 'Lobby';
         var _mUsername = GetUrlParamValue('u');
 
+        if (!_mUsername) {
+            _mUsername = 'Player' + Math.round(Math.random() * 10000);
+        }
+
         //Establish a WebSockets connection using socket.io
         var _Socket = io.connect();
 
@@ -138,9 +142,6 @@
 
         //Init the UI after load...
         $(function () {
-            if (!_mUsername) {
-                _mUsername = 'Player' + Math.round(Math.random() * 10000)
-            }
             $('#username').text(_mUsername);
         });
     </script>
