@@ -6,6 +6,10 @@ body {
     background-color:#ccf;
 }
 
+.container {
+    max-width: 960px;
+}
+
 .navbar-toggler i {
     font-size: 1.5rem;
 }
