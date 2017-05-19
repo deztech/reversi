@@ -118,8 +118,9 @@
                 alert(_Payload.message);
                 return;
             }
-            if(_Payload.username === _mUsername)
+            if (_Payload.username === _mUsername) { }
                 $('#NewMessage').val('');                                                                                                                                                                                                                       //Clear the previous chat message. (only if it was your message)
+            }
             $('#messages').prepend('<strong>' + _Payload.username + ':</strong> ' + _Payload.message + '<br />');                                                                                                                                               //Append the message to the output.
             $("#audio").html('<audio autoplay="autoplay"><source src="misc/your-turn.mp3" type="audio/mpeg" /><source src="misc/your-turn.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="misc/your-turn.mp3" /></audio>');     //Play a notification sound!
         });
