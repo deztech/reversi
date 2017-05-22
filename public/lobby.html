@@ -88,32 +88,34 @@
 
     <script src="js/main.js"></script>
     <script>
+        //Init/set vars...
         var _mChatRoom = 'Lobby';
-        var _mUsername = GetUrlParamValue('u');
+        var _mUsername = GetUrlParamValue('u');     // <-- function in main.js
 
         if (!_mUsername) {
             _mUsername = 'Player' + Math.round(Math.random() * 10000);
         }
 
         //Establish a WebSockets connection using socket.io
-        var _Socket = io.connect();
+        var _mSocket = io.connect();
 
-        //Logging...
-        _Socket.on('log', function (_Array) {
+        //Handle web socket response for log...
+        _mSocket.on('log', function (_Array) {
             console.log.apply(console, _Array);
         });
 
-        //Handle responses...
-        _Socket.on('join_room_response', function (_Payload) {
+        //Handle web socket response for join_room...
+        _mSocket.on('join_room_response', function (_Payload) {
             if (_Payload.result === 'fail') {
                 alert(_Payload.message);
                 return;
             }
             $('#messages').prepend('<em>' + _Payload.username + ' has joined the ' + _Payload.room + '!</em><br />');                                                                                                                                           //Append the message to the output.
-            $("#audio").html('<audio autoplay="autoplay"><source src="misc/your-turn.mp3" type="audio/mpeg" /><source src="misc/your-turn.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="misc/your-turn.mp3" /></audio>');     //Play a notification sound!
+            AppendAudioTag();
         });
 
-        _Socket.on('send_message_response', function (_Payload) {
+        //Handle web socket response for send_message...
+        _mSocket.on('send_message_response', function (_Payload) {
             if (_Payload.result === 'fail') {
                 alert(_Payload.message);
                 return;
@@ -122,15 +124,17 @@
                 $('#NewMessage').val('');                                                                                                                                                                                                                       //Clear the previous chat message. (only if it was your message)
             }
             $('#messages').prepend('<strong>' + _Payload.username + ':</strong> ' + _Payload.message + '<br />');                                                                                                                                               //Append the message to the output.
-            $("#audio").html('<audio autoplay="autoplay"><source src="misc/your-turn.mp3" type="audio/mpeg" /><source src="misc/your-turn.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="misc/your-turn.mp3" /></audio>');     //Play a notification sound!
+            AppendAudioTag();
         });
 
         //Send a message to JOIN ROOM...
-        var _JoinPayload = {};
-        _JoinPayload.room = _mChatRoom;
-        _JoinPayload.username = _mUsername;
-        console.log('JoinPayload: ' + JSON.stringify(_JoinPayload));
-        _Socket.emit('join_room', _JoinPayload);
+        function JoinRoom(_ChatRoom, _Username) {
+            var _JoinPayload = {};
+            _JoinPayload.room = _ChatRoom;
+            _JoinPayload.username = _Username;
+            console.log('JoinPayload: ' + JSON.stringify(_JoinPayload));
+            _mSocket.emit('join_room', _JoinPayload);
+        }
 
         //Send a message to CHAT...
         function SendMessage() {
@@ -139,12 +143,21 @@
             _ChatPayload.username = _mUsername;
             _ChatPayload.message = $('#NewMessage').val();
             console.log('ChatPayload: ' + JSON.stringify(_ChatPayload));
-            _Socket.emit('send_message', _ChatPayload);
+            _mSocket.emit('send_message', _ChatPayload);
         }
 
-        //Init the UI after load...
+        //Play notification sound...
+        function AppendAudioTag() {
+            $("#audio").html('<audio autoplay="autoplay"><source src="misc/your-turn.mp3" type="audio/mpeg" /><source src="misc/your-turn.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="misc/your-turn.mp3" /></audio>');     //Play a notification sound!
+        }
+
+        //Init the UI after load & also join the chat room...
         $(function () {
+            //Init UI...
             $('#username').text(_mUsername);
+
+            //Join Room...
+            JoinRoom(_mChatRoom, _mUsername);
         });
     </script>
 </body>
